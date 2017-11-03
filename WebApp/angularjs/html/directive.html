@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.css" />
+		<link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap-theme.css" />
+		<script type="text/javascript" src="../../plugins/jquery.js"></script>
+		<script type="text/javascript" src="../../plugins/angularjs/v1.3.13/angular.js"></script>
+		<script type="application/javascript" src="../../plugins/bootstrap/js/bootstrap.js"></script>
+		<title></title>
+	</head>
+	<body ng-app="myDirective" ng-controller="myController">
+		
+		<!--自定义指令：Element使用-->
+		<my-alert title="from directive scope" const="{{const}}"></my-alert>
+		
+		<!--自定义指令：Attribute使用-->
+		<div my-alert ></div>
+		
+		<!--自定义指令myDialog-->
+		<my-dialog></my-dialog>
+		
+		<!--自定义指令myDialog-->
+		<second-dialog></second-dialog>
+		
+		<button type="button" class="btn btn-danger" ng-click="clickme()">你敢点我？</button>
+		<button type="button" class="btn btn-success" ng-click="clickdie()">搓死你！</button>
+		<button type="button" class="btn btn-warning" ng-click="clicmy()">MyDialog！</button>
+		<div class=""></div>
+	</body>
+	<script type="application/javascript">
+		var app = angular.module("myDirective",[]);
+		app.controller("myController",function($scope){
+			$scope.name = "from controller 'scope'";
+			$scope.const = "来自Controller const"
+			
+			$scope.dangerTitle = "Controller通牒";
+			$scope.dialogMsg = "Controller 你小子要上天";
+			$scope.dataList = [];
+			$scope.clickstrong = function(){
+				$("#strong").append("Controller 笑呵呵！")
+				$scope.dataList.push(Math.random())
+			}
+		});
+		
+		// 自定义指令
+		app.directive("myAlert",function(){
+			return { 
+				/**
+				 * 表示此指令可以用在什么地方，可以选的有E(Element)、A(Attribute)、
+				 * C(Class)、M(Comment)，M并不常用。默认为 EA
+				 */
+				restrict:"EA",
+				
+				/**
+				 * 表示是否替换指令元素，
+				 * 1、true表示替换原有标签，如  <my-alert></my-alert> 会被替换为
+				 * <div>ε＝ε＝ε＝(#&gt;д&lt;)ﾉ 我被替换了</div>
+				 * 
+				 * 2、若为false则不替换原有的标签，而是在原有的标签被追加内容，如下：
+				 * 	<my-alert>
+				 * 		<div>ε＝ε＝ε＝(#&gt;д&lt;)ﾉ 我被替换了</div>
+				 *  </my-alert>
+				 */
+				replace:false,
+				
+				/**
+				 * 模板的内容，用于替换或追加到标签中。对于较复杂的 HTML 可以使用templateUrl
+				 * 引用模板，值为模板的地址。
+				 */
+				template:"<div>ε＝ε＝ε＝(#>д<)ﾉ 我被替换了 --> 表达式的值：{{name}}，{{const}}</dive>",
+				
+				/**
+				 * 作用域配置，则公用所在controller的域，即$scope。可以看到如果去掉此处的scope，
+				 * 那么name的值就为‘from controller scope’。
+				 * 如果有scope，则起到了隔离作用，这儿的key是template的表达式，即上面的，
+				 * value指的是元素的属性key，此处的title即为<my-alert>的title属性。
+				 * 
+				 * `@` 主要用于字符串（表达式）的引用
+				 * `=` 用于对象的引用
+				 * 可参考 ：https://my.oschina.net/u/2342955/blog/408889
+				 */
+				scope: {                        
+		          name:"@title",
+		          const:"@const",
+		        }
+			};
+		});
+		app.directive("myDialog",function(){
+			return {
+				restrict: "EA",
+				templateUrl : "directive-dialog.html",
+				link : function($scope){
+					/**
+					 * Controller 与 link 执行顺序为先 Controller 然后 link ，可以看到clickme、
+					 * clickstrong两个方法，都被link中在scope上同名的方法覆盖了，在controller
+					 * 中出现，但在link中没有出现的属性不会被覆盖。
+					 */
+					$scope.clickme = function(){
+						//$scope.dangerTitle = "通牒";
+						$scope.dialogMsg = "你还真敢点我"
+						$("#dialog-model").modal('show')
+					}
+					$scope.clickstrong = function(){
+						$("#strong").append("就点你！")
+					}
+					$scope.myDataList = ["路飞","娜美"];
+				}
+			}
+		});
+		app.directive("secondDialog",function(){
+			return {
+				restrict: "EA",
+				templateUrl : "directive-second-dialog.html",
+				link : function($scope){
+					/**
+					 * Controller 与 link 执行顺序为先 Controller 然后 link ，可以看到clickme、
+					 * clickstrong两个方法，都被link中在scope上同名的方法覆盖了，在controller
+					 * 中出现，但在link中没有出现的属性不会被覆盖。
+					 */
+					$scope.clickme = function(){}
+					$scope.clickstrong = function(){
+						$("#strong").append("second就点你！");
+					}
+					$scope.clicmy = function(){
+						//$scope.dangerTitle = "通牒";
+						$scope.dialogMsg = "second你还真敢点我"
+						$("#dialog-model").modal('show')
+						$scope.secondDataList = $scope.myDataList;
+					}
+				}
+			}
+		});
+		
+		
+	</script>
+</html>

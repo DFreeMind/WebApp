@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.css" />
+		<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap-theme.css" />
+		<script type="text/javascript" src="../plugins/jquery.js"></script>
+		<script type="text/javascript" src="../plugins/angularjs/v1.3.13/angular.js"></script>
+		<script type="application/javascript" src="../plugins/bootstrap/js/bootstrap.js"></script>
+		<title></title>
+	</head>
+	<body ng-app="myApp" ng-controller="myCtrl">
+		<form>
+			<select class="form-control"
+				ng-init="userModel=users[0]" 
+				ng-options="user.name for user in users"
+				ng-model="userModel"
+			></select>
+			<input class="form-control" value="{{userModel}}" />
+			<ul>
+				<li ng-repeat="job in jobs">
+					<input type="radio" ng-change="changeJob('{{job.name}}','{{job.salary}}')"
+						ng-model="jobModel" ng-value="{{job.name}}"
+					 	value="{{job.name}}" />{{job.name}}
+				</li>
+			</ul>
+			<div>
+				<span>正则验证</span>
+				<input id="regDemo" ng-keyup="regValue(this)" />
+			</div>
+		</form>
+	</body>
+	<script type="application/javascript">
+		var app = angular.module("myApp", [])
+		app.controller("myCtrl", function($scope) {
+			$scope.users=[
+				{name:"张三",age:"25",sex:"男"},
+				{name:"李四",age:"27",sex:"男"},
+				{name:"张慧",age:"22",sex:"女"},
+				{name:"刘慧娟",age:"28",sex:"女"}
+			]
+			$scope.jobs=[
+				{name:"Java",salary:"￥8000",duty:"开发"},
+				{name:"Hadoop",salary:"￥16000",duty:"运维"},
+				{name:"Scala",salary:"￥13000",duty:"spark开发"}
+			]
+			$scope.changeJob = function(name,salary){
+				alert(name+" "+salary)
+				alert($scope.jobModel)
+			}
+			console.log($scope.jobModel)
+			
+			$scope.regValue = function(_this){
+				var value = $(_this).val();
+				if(value.length == 1){
+					$(_this).val(value.replace(/[^1-9]/g,''));
+				}else{
+					$(_this).val(value.replace(/\D/g,''));
+				}
+			}
+		})
+		var regValue = function(_this){
+				var value = $(_this).val();
+				alert("原生")
+				if(value.length == 1){
+					$(_this).val(value.replace(/[^1-9]/g,''));
+				}else{
+					$(_this).val(value.replace(/\D/g,''));
+				}
+				
+			}
+	</script>
+</html>
