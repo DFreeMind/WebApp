@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../plugins/jquery-ui/jquery-ui.css" />
+		<script type="text/javascript" src="../plugins/jquery.js" ></script>
+		<script type="text/javascript" src="../plugins/jquery-ui/jquery-ui.js" ></script>
+		<title></title>
+	</head>
+	<body>
+		<ul id="sortable">
+		  <li id="item_1">Item 1</li>
+		  <li id="item_2">Item 2</li>
+		  <li id="item_3">Item 3</li>
+		  <li id="item_4">Item 4</li>
+		  <li id="item_5">Item 5</li>
+		</ul>
+		<input id="sort" value="" style="width: 90px;"/>
+		<button onclick="sort()">手动排序</button>
+	</body>
+	<script type="application/javascript">
+		
+		$("#sortable").sortable({
+			cursor: "move",
+			update:function(event, ui){
+				var array = $(this).sortable("toArray");
+				alert(array)
+				
+			}
+		});
+		var sort = function(){
+			var list = $("#sort").val().split(",");
+			for(var i = 0; i < list.length-1; i++){
+				$("#item_" + list[i]).after($("#item_" + list[i+1]));
+			}
+		}
+	</script>
+</html>
