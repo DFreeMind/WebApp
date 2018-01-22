@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.css" />
 		<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap-theme.css" />
+		<link rel="stylesheet" href="../plugins/font-awesome-4.7.0/css/font-awesome.css" />
 		<script type="text/javascript" src="../plugins/jquery.js"></script>
 		<script type="text/javascript" src="../plugins/angularjs/v1.3.13/angular.js"></script>
 		<script type="application/javascript" src="../plugins/bootstrap/js/bootstrap.js"></script>
@@ -27,6 +28,14 @@
 			<div>
 				<span>正则验证</span>
 				<input id="regDemo" ng-keyup="regValue(this)" />
+			</div>
+			<div class="">
+				<span ng-click="unfoldHistory()" class="fa fa-angle-double-up" style="cursor: pointer;"></span>
+				展开
+			</div>
+			<div id="">
+				<i class="fa fa-arrows-v" aria-hidden="true"></i>
+				<div class="fa fa-arrows" aria-hidden="true">拖动</div>
 			</div>
 		</form>
 	</body>
@@ -57,6 +66,9 @@
 				}else{
 					$(_this).val(value.replace(/\D/g,''));
 				}
+			}
+			$scope.unfoldHistory = function(){
+				alert("展开")
 			}
 		})
 		var regValue = function(_this){
